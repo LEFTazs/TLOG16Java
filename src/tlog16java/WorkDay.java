@@ -36,6 +36,7 @@ public class WorkDay {
         this.tasks = new ArrayList<>();
     }
     
+    
     public long getExtraMinPerDay() {
         return sumPerDay - requiredMinPerDay;
     }
@@ -67,12 +68,25 @@ public class WorkDay {
                 dayOfWeek == DayOfWeek.SUNDAY;
     }
 
+    
+    public Task getTask(int index) {
+        return tasks.get(index);
+    }
+    
     public long getRequiredMinPerDay() {
         return requiredMinPerDay;
+    }
+    
+    public void setRequiredMinPerDay(long requiredMinPerDay) {
+        this.requiredMinPerDay = requiredMinPerDay;
     }
 
     public LocalDate getActualDay() {
         return actualDay;
+    }
+    
+    public void setActualDay(int year, int month, int day) {
+        this.actualDay = LocalDate.of(year, month, day);
     }
 
     public long getSumPerDay() {

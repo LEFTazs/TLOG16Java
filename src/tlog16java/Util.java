@@ -26,14 +26,14 @@ public class Util {
         for (Task checkable : tasks) {
             boolean inputEndsAfterCheckableBegins = 
                     t.getEndTime().isAfter(checkable.getStartTime());
-            boolean inputStartsBeforeCheckableStarts = 
+            boolean inputStartsBeforeCheckableEnds = 
                     t.getStartTime().isBefore(checkable.getEndTime());
             if (inputEndsAfterCheckableBegins && 
-                    inputStartsBeforeCheckableStarts) {
-                return true;
+                    inputStartsBeforeCheckableEnds) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
     
     public static boolean isWeekday(WorkDay workDay) {

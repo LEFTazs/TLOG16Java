@@ -36,13 +36,6 @@ public class Task {
         return minPerTask;
     }
     
-    public boolean isMultipleQuarterHour() {
-        long timeInterval = this.getMinPerTask();
-        boolean isMultiple = timeInterval % 15 == 0;
-        return isMultiple;
-    }
-
-    
     public boolean isValidTaskId() {
         return isValidRedmineTaskId() || isValidLTTaskId();
     }
@@ -90,6 +83,10 @@ public class Task {
 
     public LocalTime getEndTime() {
         return endTime;
+    }
+    
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public void setEndTime(int hour, int min) {

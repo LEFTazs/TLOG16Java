@@ -1,7 +1,7 @@
 package tlog16java;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,34 +40,19 @@ public class WorkDay {
     public long getExtraMinPerDay() {
         return sumPerDay - requiredMinPerDay;
     }
-    
-    public boolean isSeperatedTime(Task t) {
-        for (Task checkable : tasks) {
-            boolean inputEndsAfterCheckableBegins = 
-                    t.getEndTime().isAfter(checkable.getStartTime());
-            boolean inputStartsBeforeCheckableStarts = 
-                    t.getStartTime().isBefore(checkable.getEndTime());
-            if (inputEndsAfterCheckableBegins && 
-                    inputStartsBeforeCheckableStarts) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
+        
     public void addTask(Task t) {
-        if (t.isMultipleQuarterHour() &&
-                this.isSeperatedTime(t)) {
+        if (!Util.isMultipleQuarterHour(
+                t.getStartTime(), t.getEndTime())) {
+            LocalTime roundedEndTime = Util.roundToMultipleQuarterHour(
+                    t.getStartTime(), t.getEndTime());
+            t.setEndTime(roundedEndTime);
+        }
+        if (Util.isSeperatedTime(tasks, t)) {
             tasks.add(t);
         }
     }
     
-    public boolean isWeekday() {
-        DayOfWeek dayOfWeek = actualDay.getDayOfWeek();
-        return dayOfWeek == DayOfWeek.SATURDAY ||
-                dayOfWeek == DayOfWeek.SUNDAY;
-    }
-
     
     public Task getTask(int index) {
         return tasks.get(index);

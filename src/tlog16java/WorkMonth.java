@@ -42,7 +42,7 @@ public class WorkMonth {
     
     public void addWorkDay(WorkDay workDay, boolean isWeekendEnabled) {
         if (this.isNewDate(workDay) && this.isSameMonth(workDay)) {
-            if (isWeekendEnabled || !workDay.isWeekday()) {
+            if (isWeekendEnabled || !Util.isWeekday(workDay)) {
                 days.add(workDay);
             }
         }

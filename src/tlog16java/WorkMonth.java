@@ -16,21 +16,18 @@ public class WorkMonth {
     }
     
     public long getExtraMinPerMonth() {
-        int extraMins = 0;
-        for (WorkDay workDay : days) {
-            extraMins += workDay.getExtraMinPerDay();
-        }
+        long extraMins = days.stream()
+                .mapToLong(workDay -> workDay.getExtraMinPerDay())
+                .sum();
         return extraMins;
     }
     
     public boolean isNewDate(WorkDay workDay) {
-        for (WorkDay checkable : days) {
-            if (workDay.getActualDay().
-                    equals(checkable.getActualDay())) {
-                return false;
-            }
-        }
-        return true;
+        boolean isNotNewDate = days.stream()
+                .anyMatch(checkable -> workDay.getActualDay()
+                        .equals(checkable.getActualDay())
+                );
+        return !isNotNewDate;
     }
     
     public boolean isSameMonth(WorkDay workDay) {

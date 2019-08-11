@@ -11,13 +11,11 @@ public class TimeLogger {
     }
     
     public boolean isNewMonth(WorkMonth workMonth) {
-        for (WorkMonth checkable : months) {
-            if (workMonth.getDate().
-                    equals(checkable.getDate())) {
-                return false;
-            }
-        }
-        return true;
+        boolean isNotNewMonth = months.stream()
+                .anyMatch(checkable -> workMonth.getDate()
+                        .equals(checkable.getDate())
+                );
+        return !isNotNewMonth;
     }
     
     public void addMonth(WorkMonth workMonth) {

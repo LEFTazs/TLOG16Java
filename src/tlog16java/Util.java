@@ -23,17 +23,12 @@ public class Util {
     public static boolean isSeperatedTime(
             List<Task> tasks, Task t) {
         List<Task> tasks_ = new ArrayList<>(tasks);
-        for (Task checkable : tasks) {
-            boolean inputEndsAfterCheckableBegins = 
-                    t.getEndTime().isAfter(checkable.getStartTime());
-            boolean inputStartsBeforeCheckableEnds = 
-                    t.getStartTime().isBefore(checkable.getEndTime());
-            if (inputEndsAfterCheckableBegins && 
-                    inputStartsBeforeCheckableEnds) {
-                return false;
-            }
-        }
-        return true;
+        boolean isNotSeperatedTime = tasks_.stream()
+                .anyMatch(checkable -> 
+                        t.getEndTime().isAfter(checkable.getStartTime()) && 
+                        t.getStartTime().isBefore(checkable.getEndTime())
+                );
+        return !isNotSeperatedTime;
     }
     
     public static boolean isWeekday(WorkDay workDay) {

@@ -97,4 +97,19 @@ public class Task {
         this.endTime = LocalTime.parse(endTime);
     }
 
+    @Override
+    public String toString() {
+        String stringForm = "Task ID: " + taskId;
+        if (comment != null) {
+            stringForm += ", Comment: " + comment;
+        }
+        if (startTime != null) {
+            stringForm += ", Start time: " + startTime;
+        }
+        if (endTime != null) {
+            stringForm += ", End time: " + endTime;
+        }
+        return stringForm;
+    }
+
 }

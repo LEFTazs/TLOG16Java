@@ -3,6 +3,7 @@ package tlog16java;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class WorkDay {
@@ -51,6 +52,15 @@ public class WorkDay {
         if (Util.isSeperatedTime(tasks, t)) {
             tasks.add(t);
         }
+    }
+    
+    public LocalTime getLatestTaskEndTime() {
+        Task latestTask = tasks.stream()
+                .max(Comparator.comparing(
+                        task -> task.getEndTime().hashCode())
+                )
+                .orElseThrow();
+        return latestTask.getEndTime();
     }
     
     

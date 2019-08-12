@@ -54,6 +54,10 @@ public class WorkMonth {
         return days.get(index);
     }
 
+    public List<WorkDay> getDays() {
+        return new ArrayList<WorkDay>(days);
+    }
+
     public YearMonth getDate() {
         return date;
     }

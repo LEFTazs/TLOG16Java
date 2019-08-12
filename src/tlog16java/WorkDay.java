@@ -67,6 +67,10 @@ public class WorkDay {
     public Task getTask(int index) {
         return tasks.get(index);
     }
+
+    public List<Task> getTasks() {
+        return new ArrayList<Task>(tasks);
+    }
     
     public long getRequiredMinPerDay() {
         return requiredMinPerDay;

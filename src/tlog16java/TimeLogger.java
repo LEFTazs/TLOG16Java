@@ -27,4 +27,8 @@ public class TimeLogger {
     public WorkMonth getMonth(int index) {
         return months.get(index);
     }
+
+    public List<WorkMonth> getMonths() {
+        return new ArrayList<WorkMonth>(months);
+    }    
 }

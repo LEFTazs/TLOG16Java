@@ -72,6 +72,10 @@ public class Task {
     public LocalTime getStartTime() {
         return startTime;
     }
+    
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
 
     public void setStartTime(int hour, int min) {
         this.startTime = LocalTime.of(hour, min);

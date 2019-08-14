@@ -16,6 +16,7 @@ public class Task {
         this.comment = comment;
         this.startTime = LocalTime.of(startHour, startMin);
         this.endTime = LocalTime.of(endHour, endMin);
+        roundEndTime();
     }
     
     public Task(String taskId, String comment,
@@ -24,6 +25,7 @@ public class Task {
         this.comment = comment;
         this.startTime = LocalTime.parse(startTime);
         this.endTime = LocalTime.parse(endTime);
+        roundEndTime();
     }
     
     public Task(String taskId) {
@@ -52,6 +54,22 @@ public class Task {
         return isValid;
     }
     
+    private void roundEndTime() {
+        if (!Util.isMultipleQuarterHour(this.startTime, this.endTime)) {
+            LocalTime roundedEndTime = Util.roundToMultipleQuarterHour(
+                    this.startTime, this.endTime);
+            this.endTime = roundedEndTime;
+        }
+    }
+    
+    public boolean isStartTimeSet() {
+        return this.startTime != null;
+    }
+    
+    public boolean isEndTimeSet() {
+        return this.endTime != null;
+    }
+    
     
     public String getTaskId() {
         return taskId;
@@ -75,14 +93,20 @@ public class Task {
     
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
+        if (isEndTimeSet())
+            roundEndTime();
     }
 
     public void setStartTime(int hour, int min) {
         this.startTime = LocalTime.of(hour, min);
+        if (isEndTimeSet())
+            roundEndTime();
     }
     
     public void setStartTime(String startTime) {
         this.startTime = LocalTime.parse(startTime);
+        if (isEndTimeSet())
+            roundEndTime();
     }
 
     public LocalTime getEndTime() {
@@ -91,14 +115,17 @@ public class Task {
     
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
+        roundEndTime();
     }
 
     public void setEndTime(int hour, int min) {
         this.startTime = LocalTime.of(hour, min);
+        roundEndTime();
     }
     
     public void setEndTime(String endTime) {
         this.endTime = LocalTime.parse(endTime);
+        roundEndTime();
     }
 
     @Override

@@ -43,12 +43,6 @@ public class WorkDay {
     }
         
     public void addTask(Task t) {
-        if (!Util.isMultipleQuarterHour(
-                t.getStartTime(), t.getEndTime())) {
-            LocalTime roundedEndTime = Util.roundToMultipleQuarterHour(
-                    t.getStartTime(), t.getEndTime());
-            t.setEndTime(roundedEndTime);
-        }
         if (Util.isSeperatedTime(tasks, t)) {
             tasks.add(t);
         }
@@ -61,6 +55,10 @@ public class WorkDay {
                 )
                 .orElseThrow();
         return latestTask.getEndTime();
+    }
+    
+    public boolean hasTask() {
+        return !tasks.isEmpty();
     }
     
     

@@ -29,6 +29,12 @@ public class TimeLogger {
     }
 
     public List<WorkMonth> getMonths() {
-        return new ArrayList<WorkMonth>(months);
-    }    
+        return new ArrayList<>(months);
+    }
+    
+    public void printMonths() {
+        for (int i = 0; i < months.size(); i++) {
+            System.out.printf("%d. %s\n", i + 1, months.get(i).getDate());
+        }
+    }
 }

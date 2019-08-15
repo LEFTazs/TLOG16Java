@@ -90,4 +90,10 @@ public class WorkDay {
     public long getSumPerDay() {
         return sumPerDay;
     }
+    
+    public void printTasks() {
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.printf("%d. %s\n", i + 1, tasks.get(i));
+        }
+    }
 }

@@ -55,7 +55,7 @@ public class WorkMonth {
     }
 
     public List<WorkDay> getDays() {
-        return new ArrayList<WorkDay>(days);
+        return new ArrayList<>(days);
     }
 
     public YearMonth getDate() {
@@ -68,5 +68,11 @@ public class WorkMonth {
 
     public long getRequiredMinPerMonth() {
         return requiredMinPerMonth;
+    }
+    
+    public void printDays() {
+        for (int i = 0; i < days.size(); i++) {
+            System.out.printf("%d. %s\n", i + 1, days.get(i).getActualDay());
+        }
     }
 }

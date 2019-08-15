@@ -50,6 +50,7 @@ public class WorkDay {
     
     public LocalTime getLatestTaskEndTime() {
         Task latestTask = tasks.stream()
+                .filter(task -> task.isEndTimeSet())
                 .max(Comparator.comparing(
                         task -> task.getEndTime().hashCode())
                 )

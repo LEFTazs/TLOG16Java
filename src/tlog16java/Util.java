@@ -23,11 +23,21 @@ public class Util {
     public static boolean isSeperatedTime(
             List<Task> tasks, Task t) {
         List<Task> tasks_ = new ArrayList<>(tasks);
-        boolean isNotSeperatedTime = tasks_.stream()
-                .anyMatch(checkable -> 
-                        t.getEndTime().isAfter(checkable.getStartTime()) && 
-                        t.getStartTime().isBefore(checkable.getEndTime())
-                );
+        boolean isNotSeperatedTime;
+        if (t.isEndTimeSet()) {
+            isNotSeperatedTime = tasks_.stream()
+                    .filter(task -> task.isEndTimeSet())
+                    .anyMatch(checkable -> 
+                            t.getEndTime().isAfter(checkable.getStartTime()) && 
+                            t.getStartTime().isBefore(checkable.getEndTime())
+                    );
+        } else {
+            isNotSeperatedTime = tasks_.stream()
+                    .filter(task -> task.isEndTimeSet())
+                    .anyMatch(checkable -> 
+                            t.getStartTime().isBefore(checkable.getEndTime())
+                    );
+        }
         return !isNotSeperatedTime;
     }
     

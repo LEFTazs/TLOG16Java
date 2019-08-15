@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WorkDay {
     private List<Task> tasks;
@@ -66,9 +67,29 @@ public class WorkDay {
     public Task getTask(int index) {
         return tasks.get(index);
     }
-
+    
+    public Task setTask(int index, Task newTask) {
+        return tasks.set(index, newTask);
+    }
+    
+    public void deleteTask(int index) {
+        tasks.remove(index);
+    }
+    
     public List<Task> getTasks() {
-        return new ArrayList<Task>(tasks);
+        return new ArrayList<>(tasks);
+    }
+    
+    public Task getUnfinishedTask(int index) {
+        return getUnfinishedTasks().get(index);
+    }
+    
+    public List<Task> getUnfinishedTasks() {
+        List<Task> unfinishedTasks = tasks.stream()
+                .filter(task -> !task.isEndTimeSet())
+                .collect(Collectors.toList()
+                );
+        return unfinishedTasks;
     }
     
     public long getRequiredMinPerDay() {
@@ -94,6 +115,16 @@ public class WorkDay {
     public void printTasks() {
         for (int i = 0; i < tasks.size(); i++) {
             System.out.printf("%d. %s\n", i + 1, tasks.get(i));
+        }
+    }
+    
+    public void printUnfinishedTasks() {
+        int j = 1;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (!tasks.get(i).isEndTimeSet()) {
+                System.out.printf("%d. %s\n", j, tasks.get(i));
+                j++;
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package tlog16java;
+package timelogger;
 
 import java.util.ArrayList;
 import java.util.List;

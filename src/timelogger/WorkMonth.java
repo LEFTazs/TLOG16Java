@@ -1,4 +1,4 @@
-package tlog16java;
+package timelogger;
 
 import java.time.YearMonth;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package tlog16java;
+package timelogger;
 
 import java.time.LocalTime;
 import static java.time.temporal.ChronoUnit.MINUTES;

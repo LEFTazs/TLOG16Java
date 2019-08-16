@@ -54,7 +54,7 @@ public class WorkDay {
                 .filter(task -> task.isEndTimeSet())
                 .max(Comparator.comparing(
                         task -> task.getEndTime().hashCode())
-                )
+                ) //TODO: this won't work
                 .orElseThrow();
         return latestTask.getEndTime();
     }

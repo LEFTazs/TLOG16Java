@@ -13,3 +13,7 @@ nbdist/
 build.xml
 
 manifest.mf
+
+target/
+
+pom.xml

@@ -1,5 +1,5 @@
 package timelogger.exceptions;
 
-public class EmptyTimeFieldException extends Exception {
+public class EmptyTimeFieldException extends RuntimeException {
     
 }

@@ -1,5 +1,5 @@
 package timelogger.exceptions;
 
-public class NotSeparatedTimesException extends Exception {
+public class NotSeparatedTimesException extends RuntimeException {
     
 }

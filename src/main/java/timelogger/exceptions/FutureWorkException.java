@@ -1,5 +1,5 @@
 package timelogger.exceptions;
 
-public class FutureWorkException extends Exception {
+public class FutureWorkException extends RuntimeException {
     
 }

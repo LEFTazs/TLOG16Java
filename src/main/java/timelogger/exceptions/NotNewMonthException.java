@@ -1,5 +1,5 @@
 package timelogger.exceptions;
 
-public class NotNewMonthException extends Exception {
+public class NotNewMonthException extends RuntimeException {
     
 }

@@ -1,5 +1,5 @@
 package timelogger.exceptions;
 
-public class InvalidTaskIdException extends Exception {
+public class InvalidTaskIdException extends RuntimeException {
     
 }

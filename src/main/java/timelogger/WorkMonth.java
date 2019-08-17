@@ -3,6 +3,7 @@ package timelogger;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import timelogger.exceptions.*;
 
 public class WorkMonth {
     private List<WorkDay> days;
@@ -38,11 +39,16 @@ public class WorkMonth {
     }
     
     public void addWorkDay(WorkDay workDay, boolean isWeekendEnabled) {
-        if (this.isNewDate(workDay) && this.isSameMonth(workDay)) {
-            if (isWeekendEnabled || !Util.isWeekday(workDay)) {
-                days.add(workDay);
-            }
-        }
+        if (!this.isSameMonth(workDay))
+            throw new NotTheSameMonthException();
+        
+        if (!this.isNewDate(workDay))
+            throw new NotNewDateException();
+        
+        if (!isWeekendEnabled && Util.isWeekday(workDay))
+            throw new WeekendNotEnabledException();
+        
+        days.add(workDay);
     }
     
     public void addWorkDay(WorkDay workDay) {
@@ -63,11 +69,25 @@ public class WorkMonth {
     }
 
     public long getSumPerMonth() {
+        updateSumPerMonth();
         return sumPerMonth;
+    }
+    
+    private void updateSumPerMonth() {
+        sumPerMonth = days.stream()
+                .mapToLong(day -> day.getSumPerDay())
+                .sum();
     }
 
     public long getRequiredMinPerMonth() {
+        updateRequiredMinPerMonth();
         return requiredMinPerMonth;
+    }
+    
+    private void updateRequiredMinPerMonth() {
+        requiredMinPerMonth = days.stream()
+                .mapToLong(day -> day.getRequiredMinPerDay())
+                .sum();
     }
     
     public void printDays() {

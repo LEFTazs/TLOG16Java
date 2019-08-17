@@ -42,14 +42,14 @@ public class WorkDayTest {
         WorkDay workday = new WorkDay();
         int currentYear = LocalDate.now().getYear();
         assertThrows(FutureWorkException.class, () -> 
-                workday.setActualDay(currentYear + 1, 0, 0));
+                workday.setActualDay(currentYear + 1, 1, 1));
     }
     
     @Test
     public void constructorFutureWorkException() {
         int currentYear = LocalDate.now().getYear();
         assertThrows(FutureWorkException.class, () -> 
-                new WorkDay(currentYear + 1, 0, 0));
+                new WorkDay(currentYear + 1, 1, 1));
     }
     
     @Test

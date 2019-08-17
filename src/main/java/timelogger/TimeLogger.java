@@ -2,6 +2,7 @@ package timelogger;
 
 import java.util.ArrayList;
 import java.util.List;
+import timelogger.exceptions.*;
 
 public class TimeLogger {
     private List<WorkMonth> months;
@@ -21,6 +22,8 @@ public class TimeLogger {
     public void addMonth(WorkMonth workMonth) {
         if (this.isNewMonth(workMonth)) {
             months.add(workMonth);
+        } else {
+            throw new NotNewMonthException();
         }
     }
     

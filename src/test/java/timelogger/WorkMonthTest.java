@@ -10,7 +10,7 @@ public class WorkMonthTest {
     @Test
     public void getSumPerMonth() {
         Task task1 = new Task("1234", "", "07:30", "08:45");
-        WorkDay workday1 = new WorkDay(420);
+        WorkDay workday1 = new WorkDay(420, 2016, 9, 2);
         workday1.addTask(task1);
         Task task2 = new Task("1235", "", "08:45", "09:45");
         WorkDay workday2 = new WorkDay(420, 2016, 9, 1);
@@ -33,7 +33,7 @@ public class WorkMonthTest {
     @Test
     public void getExtraMinPerMonth() {
         Task task1 = new Task("1234", "", "07:30", "08:45");
-        WorkDay workday1 = new WorkDay(420);
+        WorkDay workday1 = new WorkDay(420, 2016, 9, 2);
         workday1.addTask(task1);
         Task task2 = new Task("1235", "", "08:45", "09:45");
         WorkDay workday2 = new WorkDay(420, 2016, 9, 1);
@@ -56,7 +56,7 @@ public class WorkMonthTest {
     @Test
     public void getRequiredMinPerMonth() {
         WorkDay workday1 = new WorkDay(420, 2016, 9, 1);
-        WorkDay workday2 = new WorkDay(420);
+        WorkDay workday2 = new WorkDay(420, 2016, 9, 2);
         
         WorkMonth workmonth = new WorkMonth(2016, 9);
         workmonth.addWorkDay(workday1);
@@ -112,7 +112,7 @@ public class WorkMonthTest {
         WorkDay workday1 = new WorkDay(2016, 9, 1);
         WorkDay workday2 = new WorkDay(2016, 9, 1);
         
-        WorkMonth workmonth = new WorkMonth(2016, 8);
+        WorkMonth workmonth = new WorkMonth(2016, 9);
         workmonth.addWorkDay(workday1);
         assertThrows(NotNewDateException.class, () -> 
                 workmonth.addWorkDay(workday2));

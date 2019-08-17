@@ -5,6 +5,7 @@ import java.time.DayOfWeek;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import java.util.ArrayList;
 import java.util.List;
+import timelogger.exceptions.*;
 
 public class Util {
     public static LocalTime roundToMultipleQuarterHour(
@@ -28,8 +29,9 @@ public class Util {
             isNotSeperatedTime = tasks_.stream()
                     .filter(task -> task.isEndTimeSet())
                     .anyMatch(checkable -> 
-                            t.getEndTime().isAfter(checkable.getStartTime()) && 
-                            t.getStartTime().isBefore(checkable.getEndTime())
+                            (t.getEndTime().isAfter(checkable.getStartTime()) && 
+                            t.getStartTime().isBefore(checkable.getEndTime()))
+                            || t.getStartTime().equals(checkable.getStartTime())
                     );
         } else {
             isNotSeperatedTime = tasks_.stream()
@@ -49,6 +51,11 @@ public class Util {
 
     public static boolean isMultipleQuarterHour(
             LocalTime startTime, LocalTime endTime) {
+        if (startTime == null || endTime == null)
+            throw new EmptyTimeFieldException();
+        if (startTime.isAfter(endTime))
+            throw new NotExpectedTimeOrderException();
+        
         long timeInterval = MINUTES.between(startTime, endTime);
         boolean isMultiple = timeInterval % 15 == 0;
         return isMultiple;

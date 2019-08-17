@@ -2,6 +2,7 @@ package timelogger;
 
 import java.time.LocalTime;
 import static java.time.temporal.ChronoUnit.MINUTES;
+import timelogger.exceptions.*;
 
 public class Task {
     private String taskId;
@@ -16,6 +17,7 @@ public class Task {
         this.comment = comment;
         this.startTime = LocalTime.of(startHour, startMin);
         this.endTime = LocalTime.of(endHour, endMin);
+        throwExceptionIfWrongTimeOrder();
         roundEndTime();
     }
     
@@ -23,17 +25,24 @@ public class Task {
                 String startTime, String endTime) {
         this.taskId = taskId;
         this.comment = comment;
+        if (startTime == null || endTime == null)
+            throw new EmptyTimeFieldException();
         this.startTime = LocalTime.parse(startTime);
         this.endTime = LocalTime.parse(endTime);
+        throwExceptionIfWrongTimeOrder();
         roundEndTime();
     }
     
     public Task(String taskId) {
         this.taskId = taskId;
+        this.comment = "";
+        throwExceptionIfInvalidTaskId();
     }
     
     
-    public long getMinPerTask() {
+    public long getMinPerTask()  {
+        throwExceptionIfStartTimeNotSet();
+        throwExceptionIfEndTimeNotSet();
         long minPerTask = MINUTES.between(startTime, endTime);
         return minPerTask;
     }
@@ -62,6 +71,30 @@ public class Task {
         }
     }
     
+    
+    private void throwExceptionIfInvalidTaskId() {
+        if (this.taskId == null)
+            throw new NoTaskIdException();
+        if (!isValidTaskId())
+            throw new InvalidTaskIdException();
+    }
+        
+    private void throwExceptionIfStartTimeNotSet() {
+        if (!isStartTimeSet())
+            throw new EmptyTimeFieldException();
+    }
+    
+    private void throwExceptionIfEndTimeNotSet() {
+        if (!isEndTimeSet())
+            throw new EmptyTimeFieldException();
+    }
+    
+    private void throwExceptionIfWrongTimeOrder() {
+        if (this.endTime.isBefore(this.startTime))
+            throw new NotExpectedTimeOrderException();
+    }
+    
+    
     public boolean isStartTimeSet() {
         return this.startTime != null;
     }
@@ -77,6 +110,7 @@ public class Task {
 
     public void setTaskId(String taskId) {
         this.taskId = taskId;
+        throwExceptionIfInvalidTaskId();
     }
 
     public String getComment() {
@@ -95,18 +129,21 @@ public class Task {
         this.startTime = startTime;
         if (isEndTimeSet())
             roundEndTime();
+        throwExceptionIfWrongTimeOrder();
     }
 
     public void setStartTime(int hour, int min) {
         this.startTime = LocalTime.of(hour, min);
         if (isEndTimeSet())
             roundEndTime();
+        throwExceptionIfWrongTimeOrder();
     }
     
     public void setStartTime(String startTime) {
         this.startTime = LocalTime.parse(startTime);
         if (isEndTimeSet())
             roundEndTime();
+        throwExceptionIfWrongTimeOrder();
     }
 
     public LocalTime getEndTime() {
@@ -116,16 +153,19 @@ public class Task {
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
         roundEndTime();
+        throwExceptionIfWrongTimeOrder();
     }
 
     public void setEndTime(int hour, int min) {
-        this.startTime = LocalTime.of(hour, min);
+        this.endTime = LocalTime.of(hour, min);
         roundEndTime();
+        throwExceptionIfWrongTimeOrder();
     }
     
     public void setEndTime(String endTime) {
         this.endTime = LocalTime.parse(endTime);
         roundEndTime();
+        throwExceptionIfWrongTimeOrder();
     }
 
     @Override

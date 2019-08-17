@@ -2,6 +2,7 @@ package timelogger;
 
 import java.time.LocalTime;
 import org.junit.Test;
+//import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.*;
 import timelogger.Task;
 import timelogger.exceptions.*;
@@ -20,8 +21,9 @@ public class TaskTest {
     @Test
     public void emptyTimeFieldException() {
         String taskId = "1111";
+        String comment = "";
         assertThrows(EmptyTimeFieldException.class, () -> 
-                new Task(taskId));
+                new Task(taskId, comment, null, null));
     }
     
     @Test
@@ -75,7 +77,7 @@ public class TaskTest {
         Task task = new Task(taskId, "", startTime, endTime);
         
         task.setStartTime("07:25");
-        assertEquals(LocalTime.of(7, 40), task.getStartTime());
+        assertEquals(LocalTime.of(7, 40), task.getEndTime());
     }
     
     @Test
@@ -86,7 +88,7 @@ public class TaskTest {
         Task task = new Task(taskId, "", startTime, endTime);
         
         task.setStartTime(7, 25);
-        assertEquals(LocalTime.of(7, 40), task.getStartTime());
+        assertEquals(LocalTime.of(7, 40), task.getEndTime());
     }
     
     @Test
@@ -97,7 +99,7 @@ public class TaskTest {
         Task task = new Task(taskId, "", startTime, endTime);
         
         task.setStartTime(LocalTime.of(7, 25));
-        assertEquals(LocalTime.of(7, 40), task.getStartTime());
+        assertEquals(LocalTime.of(7, 40), task.getEndTime());
     }
     
     @Test
@@ -211,7 +213,7 @@ public class TaskTest {
         Task task = new Task(taskId, comment, startTime, endTime);
         assertEquals(taskId, task.getTaskId());
         assertEquals(comment, task.getComment());
-        assertEquals(startTime, task.getStartTime());
-        assertEquals(endTime, task.getEndTime());
+        assertEquals(startTime, task.getStartTime().toString());
+        assertEquals(endTime, task.getEndTime().toString());
     }
 }

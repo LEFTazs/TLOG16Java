@@ -25,10 +25,16 @@ public class WorkDayTest {
     }
     
     @Test
-    public void negativeMinutesOfWorkException() {
+    public void setterNegativeMinutesOfWorkException() {
         WorkDay workday = new WorkDay();
         assertThrows(NegativeMinutesOfWorkException.class, () -> 
                 workday.setRequiredMinPerDay(-50));
+    }
+    
+    @Test
+    public void constructorNegativeMinutesOfWorkException() {
+        assertThrows(NegativeMinutesOfWorkException.class, () -> 
+                new WorkDay(-50));
     }
     
     @Test
@@ -43,7 +49,7 @@ public class WorkDayTest {
     public void constructorFutureWorkException() {
         int currentYear = LocalDate.now().getYear();
         assertThrows(FutureWorkException.class, () -> 
-                new WorkDay(currentYear, 0, 0));
+                new WorkDay(currentYear + 1, 0, 0));
     }
     
     @Test

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import timelogger.exceptions.*;
 
+@lombok.Getter
 public class WorkMonth {
     private List<WorkDay> days;
     private YearMonth date;
@@ -62,10 +63,6 @@ public class WorkMonth {
 
     public List<WorkDay> getDays() {
         return new ArrayList<>(days);
-    }
-
-    public YearMonth getDate() {
-        return date;
     }
 
     public long getSumPerMonth() {

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import timelogger.exceptions.*;
 
+@lombok.Getter
 public class WorkDay {
     private List<Task> tasks;
     private long requiredMinPerDay;
@@ -118,19 +119,11 @@ public class WorkDay {
         return unfinishedTasks;
     }
     
-    public long getRequiredMinPerDay() {
-        return requiredMinPerDay;
-    }
-    
     public void setRequiredMinPerDay(long requiredMinPerDay) {
         if (requiredMinPerDay < 0)
             throw new NegativeMinutesOfWorkException();
         
         this.requiredMinPerDay = requiredMinPerDay;
-    }
-
-    public LocalDate getActualDay() {
-        return actualDay;
     }
     
     public void setActualDay(int year, int month, int day) {        

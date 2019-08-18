@@ -4,6 +4,8 @@ import java.time.LocalTime;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import timelogger.exceptions.*;
 
+@lombok.Getter
+@lombok.Setter
 public class Task {
     private String taskId;
     private String comment;
@@ -104,25 +106,9 @@ public class Task {
     }
     
     
-    public String getTaskId() {
-        return taskId;
-    }
-
     public void setTaskId(String taskId) {
         this.taskId = taskId;
         throwExceptionIfInvalidTaskId();
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
     }
     
     public void setStartTime(LocalTime startTime) {
@@ -144,10 +130,6 @@ public class Task {
         if (isEndTimeSet())
             roundEndTime();
         throwExceptionIfWrongTimeOrder();
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
     }
     
     public void setEndTime(LocalTime endTime) {

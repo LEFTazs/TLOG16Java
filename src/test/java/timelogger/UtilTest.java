@@ -94,7 +94,7 @@ public class UtilTest {
     
     private Task simpleTaskCreator(int startHour, int startMin,
             int endHour, int endMin) {
-        return new Task("", "", startHour, startMin, endHour, endMin);
+        return new Task("1234", "", startHour, startMin, endHour, endMin);
     }
     
     private String isSeperatedTimeCoder(List<Task> tasksToCheck) {

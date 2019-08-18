@@ -4,6 +4,10 @@ import java.time.LocalTime;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import timelogger.exceptions.*;
 
+/**
+ * A task is a duration of time, with an assigned indentifier.
+ * Additionally, a comment can be added for the task.
+ */
 @lombok.Getter
 @lombok.Setter
 public class Task {
@@ -19,6 +23,7 @@ public class Task {
         this.comment = comment;
         this.startTime = LocalTime.of(startHour, startMin);
         this.endTime = LocalTime.of(endHour, endMin);
+        throwExceptionIfInvalidTaskId();
         throwExceptionIfWrongTimeOrder();
         roundEndTime();
     }
@@ -31,6 +36,7 @@ public class Task {
             throw new EmptyTimeFieldException();
         this.startTime = LocalTime.parse(startTime);
         this.endTime = LocalTime.parse(endTime);
+        throwExceptionIfInvalidTaskId();
         throwExceptionIfWrongTimeOrder();
         roundEndTime();
     }
@@ -42,6 +48,11 @@ public class Task {
     }
     
     
+    /**
+     * Calculate the minutes between the start and endtime of the task.
+     * @return long Minutes between start- and endtime.
+     * @exception EmptyTimeFieldException The starttime or endtime was not defined.
+     */
     public long getMinPerTask()  {
         throwExceptionIfStartTimeNotSet();
         throwExceptionIfEndTimeNotSet();
@@ -49,6 +60,10 @@ public class Task {
         return minPerTask;
     }
     
+    /**
+     * Check if the task's id is a valid Redmine id or a valid LT id.
+     * @return boolean Whether the task id is valid or not.
+     */
     public boolean isValidTaskId() {
         return isValidRedmineTaskId() || isValidLTTaskId();
     }

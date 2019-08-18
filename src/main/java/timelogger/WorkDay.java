@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import timelogger.exceptions.*;
 
+/**
+ * Tracks tasks. Contains statistics of these tasks.
+ */
 @lombok.Getter
 public class WorkDay {
     private List<Task> tasks;
@@ -50,11 +53,21 @@ public class WorkDay {
         return date.isAfter(LocalDate.now());
     }
     
+    /**
+     * How many extra minutes are there for this day.
+     * @return long Extra minutes for this day.
+     */
     public long getExtraMinPerDay() {
         updateSumPerDay();
         return sumPerDay - requiredMinPerDay;
     }
-        
+    
+    /**
+     * Add a task to this days's tasks.
+     * @param t Task to be added.
+     * @exception NotSeparatedTimesException The given task's time interval 
+     * is not seperated from the day's tasks.
+     */
     public void addTask(Task t) {
         if (Util.isSeperatedTime(tasks, t)) {
             tasks.add(t);
@@ -63,6 +76,11 @@ public class WorkDay {
         }
     }
     
+    /**
+     * Find the latest task based on it's endtime.
+     * @return LocalTime The latest task's endtime. 
+     * If there are no tasks, null is returned.
+     */
     public LocalTime getLatestTaskEndTime() {
         Task latestTask = tasks.stream()
                 .filter(task -> task.isEndTimeSet())
@@ -133,6 +151,11 @@ public class WorkDay {
             throw new FutureWorkException();
     }
 
+    /**
+     * Update the sumPerDay field and return it.
+     * Sum per day is calculated by summing this workday's task's minPerTask.
+     * @return long Sum per day.
+     */
     public long getSumPerDay() {
         updateSumPerDay();
         return sumPerDay;
@@ -144,12 +167,21 @@ public class WorkDay {
                 .sum();
     }
     
+    /**
+     * Print out this day's tasks line-by-line.
+     * Formatting is the following: {index}. {task_object}
+     */
     public void printTasks() {
         for (int i = 0; i < tasks.size(); i++) {
             System.out.printf("%d. %s\n", i + 1, tasks.get(i));
         }
     }
     
+    /**
+     * Print out this day's unfinished tasks line-by-line.
+     * Tasks are unfinished if their endtime is null.
+     * Formatting is the following: {index}. {task_object}
+     */
     public void printUnfinishedTasks() {
         int j = 1;
         for (int i = 0; i < tasks.size(); i++) {

@@ -3,8 +3,10 @@ package timelogger;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.function.IntPredicate;
+import timelogger.exceptions.*;
 
 public class TimeLoggerUI {
     private TimeLogger timelogger;
@@ -15,8 +17,8 @@ public class TimeLoggerUI {
     private int chosenDayIndex;
     private int chosenTaskIndex;
     
-    private final int MAX_LOGGABLE_YEAR;
-    
+    private final int MIN_LOGGABLE_YEAR;
+        
     private String menuText;
     
     public TimeLoggerUI() {
@@ -28,8 +30,8 @@ public class TimeLoggerUI {
         chosenDayIndex = -1;
         chosenTaskIndex = -1;
         
-        MAX_LOGGABLE_YEAR = 2025;
-        
+        MIN_LOGGABLE_YEAR = 2000;
+                
         menuText = 
                 "\n\n0. Exit\n"
                 + "1. List months\n"
@@ -55,7 +57,7 @@ public class TimeLoggerUI {
         while (!exit) {
             System.out.println(this.menuText);
             int chosenMenuItem = readIntWithCondition("Choose a menu item: ", 
-                    index -> index >=0 && index <= 10);
+                    index -> index >= 0 && index <= 10);
             switch (chosenMenuItem) {
                 case 0:
                     exit = true;
@@ -90,6 +92,9 @@ public class TimeLoggerUI {
                 case 10:
                     showStatistics();
                     break;
+            }
+            if (!exit) {
+                readString("\nPress a button to return to the menu . . .");
             }
         }
     }
@@ -174,9 +179,19 @@ public class TimeLoggerUI {
         this.chosenTaskIndex = chosenTaskIndex;
     }
     
+    
+    
     private void addNewMonth() {
+        try {
+            tryAddNewMonth();
+        } catch (NotNewMonthException e) {
+            printError(e, "Given month has already been added.");
+        }
+    }
+    
+    private void tryAddNewMonth() {
         int newYear = 
-                readYear("Please write the year: ", this.MAX_LOGGABLE_YEAR);
+                readYear("Please write the year: ", this.MIN_LOGGABLE_YEAR);
         int newMonth = 
                 readMonth("Please write the month: ");
         WorkMonth newWorkMonth = new WorkMonth(newYear, newMonth);
@@ -184,6 +199,18 @@ public class TimeLoggerUI {
     }
     
     private void addNewDay() {
+        try {
+            tryAddNewDay();
+        } catch (FutureWorkException e) {
+            printError(e, "Given day's date is in the future.");
+        } catch (NotNewDateException e) {
+            printError(e, "Given day has already been added to the workmonth.");
+        } catch (WeekendNotEnabledException e) {
+            printError(e, "Given day is a weekend day.");
+        }
+    }
+    
+    private void tryAddNewDay() {
         listAndChooseMonth();
         YearMonth chosenMonthDate = 
                 timelogger.getMonth(this.chosenMonthIndex)
@@ -200,10 +227,24 @@ public class TimeLoggerUI {
                 chosenMonthDate.getMonthValue(), 
                 newDayActualDay);
         timelogger.getMonth(this.chosenMonthIndex)
-                .addWorkDay(newDay, true);
+                .addWorkDay(newDay);
     }
     
     private void startTask() {
+        try {
+            tryStartTask();
+        } catch(NoTaskIdException e) {
+            printError(e, "No task id was given.");
+        } catch(InvalidTaskIdException e) {
+            printError(e, "Given task id is invalid.");
+        } catch(NotSeparatedTimesException e) {
+            printError(e, "Given task's time is overlaying another time in the day's task list.");
+        } catch(DateTimeParseException e) {
+            printError(e, "Given time was invalid.");
+        }
+    }
+    
+    private void tryStartTask() {
         listAndChooseDay();
         String taskId = 
                 readString("Please write task id: ");
@@ -226,7 +267,10 @@ public class TimeLoggerUI {
         }
         if (!startTime.isBlank())
             newTask.setStartTime(startTime);
-        //TODO: else throw exception
+        else {
+            System.out.println("Can't leave an empty starttime field for the first task.");
+            return;
+        }
         
         timelogger
                 .getMonth(this.chosenMonthIndex)
@@ -235,6 +279,16 @@ public class TimeLoggerUI {
     }
     
     private void finishTask() {
+        try {
+            tryFinishTask();
+        } catch(NotExpectedTimeOrderException e) {
+            printError(e, "Given end time is before the task's start time.");
+        } catch(DateTimeParseException e) {
+            printError(e, "Given time was invalid.");
+        }
+    }
+    
+    private void tryFinishTask() {
         listAndChooseUnfinishedTask();
         LocalTime endTime = readTime("Write the chosen task's endtime: ");
         
@@ -246,6 +300,10 @@ public class TimeLoggerUI {
     }
     
     private void deleteTask() {
+        tryDeleteTask();
+    }
+    
+    private void tryDeleteTask() {
         listAndChooseTask();
         
         boolean confirmed = readBoolean(
@@ -259,6 +317,22 @@ public class TimeLoggerUI {
     }
     
     private void modifyTask() {
+        try {
+            tryModifyTask();
+        } catch(EmptyTimeFieldException e) {
+            printError(e, "Start or end time is missing.");
+        } catch(NoTaskIdException e) {
+            printError(e, "No task id was given.");
+        } catch(InvalidTaskIdException e) {
+            printError(e, "Given task id is invalid.");
+        } catch(NotExpectedTimeOrderException e) {
+            printError(e, "Task's end time is before it's start time.");
+        } catch(DateTimeParseException e) {
+            printError(e, "Given time was invalid.");
+        }
+    }
+    
+    private void tryModifyTask() {
         listAndChooseTask();
         
         Task chosenTask = timelogger.getMonth(this.chosenMonthIndex)
@@ -315,12 +389,12 @@ public class TimeLoggerUI {
     }
     
     
-    private int readYear(String message, int maxYearExclusive) {
+    private int readYear(String message, int minYearInclusive) {
         int currentYear = LocalDate.now().getYear();
         int newYear = 
                 readIntWithCondition(
                         message, 
-                        year -> currentYear <= year && year < maxYearExclusive);
+                        year -> minYearInclusive <= year && year <= currentYear);
         return newYear;
     }
     
@@ -350,7 +424,7 @@ public class TimeLoggerUI {
     
     private LocalTime readTime(String message) {
         String scan = readString(message);
-        LocalTime time = LocalTime.parse(scan); //TODO: check input
+        LocalTime time = LocalTime.parse(scan);
         return time;
     }
     
@@ -388,5 +462,11 @@ public class TimeLoggerUI {
             else if (scanFormatted.equals("n"))
                 return false;
         } while (true);
+    }
+    
+    private void printError(Exception e, String message) {
+        System.out.printf("%s: %s\n", 
+                e.getClass().getName(), 
+                message);
     }
 }

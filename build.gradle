@@ -1,9 +1,9 @@
 plugins {
     id 'pl.allegro.tech.build.axion-release' version '1.4.0'
-	id 'war'
 }
 
 apply plugin: 'java'
+apply plugin: 'application'
 
 scmVersion {
     versionCreator 'versionWithBranch'
@@ -13,9 +13,7 @@ project.version = scmVersion.version
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-if (!hasProperty('mainClass')) {
-    ext.mainClass = 'timelogger.TimeLoggerUI'
-}
+mainClassName = 'timelogger.TimeLoggerUI'
 
 repositories {
     mavenCentral()
@@ -32,7 +30,12 @@ dependencies {
 	testCompile group: 'junit', name: 'junit', version: '4.12'
 	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.1'
 	
-	providedCompile group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
+	compileOnly('org.projectlombok:lombok:1.18.8')
+	annotationProcessor('org.projectlombok:lombok:1.18.8')
+}
+
+run{
+    standardInput = System.in
 }
 
 task fatJar(type: Jar) {
